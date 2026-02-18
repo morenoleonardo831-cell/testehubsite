@@ -1,0 +1,1487 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Moreno Móveis</title>
+
+  <style>
+    :root{
+      --bg:#0b0b0f;
+      --panel:#111118;
+      --text:#f2f2f2;
+      --muted:#b8b8b8;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+
+      --orange:#ff7a00;
+      --orange2:#ff9d3a;
+      --danger:#ff4d4d;
+      --ok:#3ad07a;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1100px 650px at 15% -10%, rgba(255,122,0,.18), transparent 55%),
+        radial-gradient(900px 600px at 85% 0%, rgba(255,157,58,.10), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:1100px; margin:0 auto; padding:18px; }
+
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(11,11,15,.78);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      padding:12px 18px;
+      max-width:1100px; margin:0 auto;
+      flex-wrap:wrap;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; }
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      border:1px solid var(--border);
+      box-shadow: var(--shadow);
+      background:#0f0f16;
+      object-fit: cover;
+    }
+    .brand h1{ margin:0; font-size:16px; line-height:1.1; letter-spacing:.2px; }
+    .brand small{ color:var(--muted); font-size:12px; }
+
+    .search{
+      flex:1;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      max-width:520px;
+      min-width: 260px;
+    }
+    .rightActions{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .input{
+      width:100%;
+      background: rgba(255,255,255,.05);
+      border:1px solid var(--border);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      outline:none;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+      white-space:nowrap;
+      display:inline-flex; gap:8px; align-items:center; justify-content:center;
+    }
+    .btn:hover{
+      background: rgba(255,122,0,.12);
+      border-color: rgba(255,122,0,.35);
+    }
+    .btn:active{ transform: scale(.98); }
+    .btn.orange{
+      background: linear-gradient(135deg, rgba(255,122,0,.95), rgba(255,157,58,.85));
+      border-color: rgba(255,122,0,.55);
+      color:#111;
+      font-weight:800;
+    }
+    .btn.orange:hover{ filter: brightness(1.03); }
+    .btn.danger:hover{ background: rgba(255,77,77,.12); border-color: rgba(255,77,77,.35); }
+    .btn.ok:hover{ background: rgba(58,208,122,.12); border-color: rgba(58,208,122,.35); }
+
+    .pill{
+      display:inline-flex;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      font-size:12px;
+      color:var(--muted);
+      gap:8px;
+      align-items:center;
+    }
+    .pill b{ color:var(--text); font-weight:800; }
+    .counter{
+      min-width: 22px;
+      height: 22px;
+      padding: 0 7px;
+      border-radius: 999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,122,0,.16);
+      border:1px solid rgba(255,122,0,.30);
+      color: var(--orange2);
+      font-weight:900;
+      font-size:12px;
+    }
+
+    .hero{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    .card{
+      background: rgba(255,255,255,.05);
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero .left{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,122,0,.35);
+      background: rgba(255,122,0,.10);
+      width:fit-content;
+      color: var(--orange2);
+      font-size:12px;
+      font-weight:700;
+    }
+    .hero h2{ margin:0; font-size:28px; line-height:1.15; letter-spacing:.2px; }
+    .hero p{ margin:0; color:var(--muted); line-height:1.5; }
+    .hero .ctaRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; align-items:center; }
+
+    .heroImg{ height:100%; min-height:260px; background:#0f0f16; position:relative; }
+    .heroImg img{ width:100%; height:100%; object-fit:cover; display:block; filter:saturate(1.05) contrast(1.02); }
+    .heroImg .overlay{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.65)); }
+    .heroImg .caption{
+      position:absolute; left:14px; right:14px; bottom:14px;
+      padding:10px 12px; border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.35);
+      color:#fff; font-size:12px;
+    }
+
+    .sectionHead{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:12px; margin-top:18px; margin-bottom:10px;
+      flex-wrap:wrap;
+    }
+    .sectionHead h3{ margin:0; font-size:16px; letter-spacing:.2px; }
+    .sectionHead .sub{ color:var(--muted); font-size:12px; }
+
+    .grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:12px; }
+    @media (max-width: 980px){ .grid{ grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 740px){
+      .hero{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+      .search{ max-width:none; width:100%; }
+    }
+    @media (max-width: 460px){ .grid{ grid-template-columns: 1fr; } }
+
+    .product{ display:flex; flex-direction:column; overflow:hidden; }
+    .product .img{ height:150px; background:#0f0f16; border-bottom:1px solid var(--border); }
+    .product .img img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .product .body{ padding:12px; display:flex; flex-direction:column; gap:10px; flex:1; }
+    .title{ margin:0; font-size:14px; letter-spacing:.2px; }
+    .desc{ margin:0; color:var(--muted); font-size:12px; line-height:1.35; min-height: 32px; }
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:auto; }
+    .price{ font-weight:900; color: var(--orange2); letter-spacing:.2px; }
+    .mini{ color:var(--muted); font-size:12px; }
+
+    .stockLine{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      color: var(--muted);
+      font-size:12px;
+      border-top:1px dashed rgba(255,255,255,.10);
+      padding-top:10px;
+      margin-top:4px;
+    }
+    .stockBadge{
+      display:inline-flex; gap:6px; align-items:center;
+      padding:5px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+    }
+    .stockBadge strong{ color: var(--text); }
+    .out{ border-color: rgba(255,77,77,.35); background: rgba(255,77,77,.08); color: rgba(255,77,77,.95); }
+    .low{ border-color: rgba(255,122,0,.35); background: rgba(255,122,0,.08); color: rgba(255,157,58,.95); }
+    .okStock{ border-color: rgba(58,208,122,.35); background: rgba(58,208,122,.08); color: rgba(58,208,122,.95); }
+
+    footer{ margin:22px 0 40px; color: var(--muted); font-size:12px; text-align:center; }
+
+    /* Modal / Drawer */
+    .modalBg{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      z-index:50;
+    }
+    .modal{
+      width:min(560px, 100%);
+      background: rgba(17,17,24,.95);
+      border:1px solid rgba(255,122,0,.20);
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .modalHeader{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .modalHeader strong{ font-size:14px; }
+    .modalHeader span{ color:var(--muted); font-size:12px; }
+    .modalBody{ padding:14px; display:grid; gap:10px; }
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    @media (max-width: 520px){ .grid2{ grid-template-columns: 1fr; } }
+    label{ font-size:12px; color:var(--muted); display:grid; gap:6px; }
+    .help{ font-size:12px; color:var(--muted); line-height:1.4; }
+
+    .toast{
+      position:fixed; left:50%; bottom:16px; transform: translateX(-50%);
+      background: rgba(0,0,0,.55);
+      border:1px solid var(--border);
+      padding:10px 12px;
+      border-radius:14px;
+      display:none;
+      gap:10px;
+      align-items:center;
+      z-index:60;
+      box-shadow: var(--shadow);
+      max-width: 92vw;
+    }
+    .dot{ width:10px; height:10px; border-radius:50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(255,122,0,.15); flex:0 0 auto; }
+
+    /* Drawer cart/admin */
+    .drawerBg{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.55);
+      display:none;
+      z-index:55;
+    }
+    .drawer{
+      position:fixed;
+      top:0; right:0;
+      width:min(460px, 92vw);
+      height:100%;
+      background: rgba(17,17,24,.96);
+      border-left:1px solid rgba(255,122,0,.18);
+      box-shadow: var(--shadow);
+      transform: translateX(110%);
+      transition: transform .25s ease;
+      z-index:56;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.open{ transform: translateX(0); }
+    .drawerHead{
+      padding:14px;
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .drawerHead strong{ font-size:14px; }
+    .drawerBody{ padding:14px; overflow:auto; display:grid; gap:10px; }
+    .drawerFoot{
+      padding:14px;
+      border-top:1px solid var(--border);
+      display:grid; gap:10px;
+    }
+
+    .line{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      font-size:13px;
+    }
+    .sep{ height:1px; background: rgba(255,255,255,.08); }
+
+    .item{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      border-radius:16px;
+      padding:10px;
+      display:grid;
+      gap:8px;
+    }
+    .itemTop{
+      display:flex; gap:10px; align-items:center;
+    }
+    .thumb{
+      width:54px; height:54px; border-radius:12px;
+      background:#0f0f16;
+      border:1px solid rgba(255,255,255,.10);
+      object-fit:cover;
+      flex:0 0 auto;
+    }
+    .itemTop h4{ margin:0; font-size:13px; }
+    .itemTop p{ margin:2px 0 0; font-size:12px; color:var(--muted); }
+    .qtyRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .qtyControls{ display:flex; gap:8px; align-items:center; }
+    .qtyBtn{
+      width:34px; height:34px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      cursor:pointer;
+      color: var(--text);
+      font-weight:900;
+    }
+    .qtyBtn:hover{ border-color: rgba(255,122,0,.35); background: rgba(255,122,0,.10); }
+    .qtyVal{ min-width: 26px; text-align:center; font-weight:900; }
+
+    .adminTabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .tab{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      cursor:pointer;
+      font-size:12px;
+      font-weight:800;
+    }
+    .tab.active{
+      border-color: rgba(255,122,0,.35);
+      background: rgba(255,122,0,.10);
+      color: var(--orange2);
+    }
+    .form{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+      border-radius:16px;
+      padding:12px;
+      display:grid; gap:10px;
+    }
+    .formTitle{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .formTitle b{ color: var(--text); }
+    .muted{ color: var(--muted); font-size:12px; }
+  </style>
+</head>
+
+<body>
+  <!-- =========================
+       MODAL CADASTRO (cliente)
+       ========================= -->
+  <div id="modalCadastroBg" class="modalBg" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Cadastro">
+      <div class="modalHeader">
+        <div>
+          <strong>Bem-vindo(a) à Moreno Móveis</strong><br/>
+          <span>Faça seu cadastro rapidinho para continuar</span>
+        </div>
+        <button class="btn" id="btnFecharCadastro" title="Fechar">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="grid2">
+          <label>
+            Nome
+            <input class="input" id="cadNome" placeholder="Seu nome" autocomplete="name" />
+          </label>
+          <label>
+            Telefone/WhatsApp
+            <input class="input" id="cadTel" placeholder="(99) 99999-9999" autocomplete="tel" />
+          </label>
+        </div>
+        <label>
+          E-mail
+          <input class="input" id="cadEmail" placeholder="voce@email.com" autocomplete="email" />
+        </label>
+        <label>
+          Cidade
+          <input class="input" id="cadCidade" placeholder="Ex: Paulo de Faria - SP" autocomplete="address-level2" />
+        </label>
+        <div class="help">
+          Seus dados ficam salvos <b>somente neste navegador</b> (localStorage). Depois dá pra integrar com back-end.
+        </div>
+        <button class="btn orange" id="btnCadastrar">Cadastrar e entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       MODAL LOGIN ADMIN
+       ========================= -->
+  <div id="modalLoginBg" class="modalBg" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Login Admin">
+      <div class="modalHeader">
+        <div>
+          <strong>Entrar no Painel</strong><br/>
+          <span>Admin ou Vendedor</span>
+        </div>
+        <button class="btn" id="btnFecharLogin" title="Fechar">✕</button>
+      </div>
+      <div class="modalBody">
+        <label>
+          Usuário
+          <input class="input" id="admUser" placeholder="ex: admin" autocomplete="username" />
+        </label>
+        <label>
+          Senha
+          <input class="input" id="admPass" placeholder="******" type="password" autocomplete="current-password" />
+        </label>
+        <div class="help" id="loginHint"></div>
+        <button class="btn orange" id="btnLogin">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="toastTxt">Mensagem</span>
+  </div>
+
+  <!-- =========================
+       HEADER
+       ========================= -->
+  <header>
+    <div class="topbar">
+      <a class="brand" href="#" id="brandLink" title="Voltar ao início">
+        <img id="siteLogo" class="logo" alt="Logo Moreno Móveis" />
+        <div>
+          <h1 id="siteName">Moreno Móveis</h1>
+          <small id="siteTag">Móveis com estilo e conforto</small>
+        </div>
+      </a>
+
+      <div class="search">
+        <input id="searchInput" class="input" placeholder="Buscar produto... (ex: sofá, mesa, rack)" />
+        <button class="btn" id="btnLimpar">Limpar</button>
+      </div>
+
+      <div class="rightActions">
+        <button class="btn" id="btnCart">🛒 Carrinho <span class="counter" id="cartCount">0</span></button>
+        <button class="btn" id="btnOpenLogin">🔐 Painel</button>
+        <button class="btn danger" id="btnLogout" style="display:none;">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- =========================
+         HERO
+         ========================= -->
+    <section class="hero">
+      <div class="card left">
+        <div class="badge">🔥 Promoções e novidades</div>
+        <h2 id="heroTitle">Deixe sua casa mais bonita com a Moreno Móveis</h2>
+        <p id="heroText">
+          Escolha móveis de qualidade, com visual moderno e ótimo custo-benefício.
+        </p>
+
+        <div class="ctaRow">
+          <button class="btn orange" id="btnVerProdutos">Ver produtos</button>
+          <button class="btn" id="btnMeuCadastro">Meu cadastro</button>
+          <span class="pill" id="pillCliente">👤 <b>Visitante</b></span>
+          <span class="pill" id="pillStaff" style="display:none;">🛠️ <b>Sem login</b></span>
+        </div>
+      </div>
+
+      <div class="card heroImg">
+        <img id="heroImage" alt="Imagem principal da loja" />
+        <div class="overlay"></div>
+        <div class="caption" id="heroCaption">Troque esta imagem colando uma URL na CONFIG.</div>
+      </div>
+    </section>
+
+    <!-- =========================
+         PRODUTOS
+         ========================= -->
+    <div class="sectionHead">
+      <div>
+        <h3>Produtos</h3>
+        <div class="sub" id="countInfo">Carregando...</div>
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn" id="btnRestoreProducts" title="Restaura produtos padrão (apaga os adicionados no navegador)">
+          Restaurar padrão
+        </button>
+        <button class="btn" id="btnOpenAdmin" style="display:none;">🛠️ Abrir Admin</button>
+      </div>
+    </div>
+
+    <section id="productsGrid" class="grid"></section>
+
+    <footer>
+      © <span id="year"></span> Moreno Móveis • HTML + CSS + JS (fácil de expandir)
+    </footer>
+  </main>
+
+  <!-- =========================
+       DRAWER: CARRINHO
+       ========================= -->
+  <div id="cartBg" class="drawerBg"></div>
+  <aside id="cartDrawer" class="drawer" aria-label="Carrinho">
+    <div class="drawerHead">
+      <strong>🛒 Seu carrinho</strong>
+      <button class="btn" id="btnCloseCart">✕</button>
+    </div>
+    <div class="drawerBody" id="cartBody"></div>
+    <div class="drawerFoot">
+      <div class="line"><span>Total</span><b id="cartTotal">R$ 0,00</b></div>
+      <div class="muted">Ao finalizar, o estoque é abatido neste navegador (localStorage).</div>
+      <button class="btn orange" id="btnCheckout">Finalizar pedido</button>
+      <button class="btn danger" id="btnClearCart">Limpar carrinho</button>
+    </div>
+  </aside>
+
+  <!-- =========================
+       DRAWER: ADMIN
+       ========================= -->
+  <div id="adminBg" class="drawerBg"></div>
+  <aside id="adminDrawer" class="drawer" aria-label="Painel Admin">
+    <div class="drawerHead">
+      <strong>🛠️ Painel</strong>
+      <button class="btn" id="btnCloseAdmin">✕</button>
+    </div>
+
+    <div class="drawerBody">
+      <div class="adminTabs">
+        <button class="tab active" data-tab="prod">Produtos</button>
+        <button class="tab" data-tab="users" id="tabUsers">Usuários</button>
+      </div>
+
+      <!-- Produtos -->
+      <div id="tabProd" class="form">
+        <div class="formTitle">
+          <b>Gerenciar produtos</b>
+          <span class="muted" id="staffRoleLine"></span>
+        </div>
+
+        <div class="grid2">
+          <label>
+            Nome do produto
+            <input class="input" id="pName" placeholder="Ex: Sofá 3 lugares" />
+          </label>
+          <label>
+            Categoria
+            <input class="input" id="pCategory" placeholder="Ex: Sala" />
+          </label>
+        </div>
+
+        <div class="grid2">
+          <label>
+            Preço (ex: 1299.90)
+            <input class="input" id="pPrice" placeholder="1299.90" inputmode="decimal" />
+          </label>
+          <label>
+            Estoque (quantidade)
+            <input class="input" id="pStock" placeholder="10" inputmode="numeric" />
+          </label>
+        </div>
+
+        <label>
+          URL da imagem
+          <input class="input" id="pImage" placeholder="https://..." />
+        </label>
+
+        <label>
+          Descrição
+          <input class="input" id="pDesc" placeholder="Descrição curta..." />
+        </label>
+
+        <div class="grid2">
+          <button class="btn orange" id="btnSaveProduct">Salvar (Adicionar/Atualizar)</button>
+          <button class="btn" id="btnClearForm">Limpar formulário</button>
+        </div>
+
+        <div class="sep"></div>
+        <div class="muted">Clique em “Editar” em um produto para carregar os dados aqui.</div>
+      </div>
+
+      <!-- Usuários (só admin) -->
+      <div id="tabUsers" class="form" style="display:none;">
+        <div class="formTitle">
+          <b>Gerenciar usuários (somente Admin)</b>
+          <span class="muted">Login do painel</span>
+        </div>
+
+        <div class="grid2">
+          <label>
+            Usuário
+            <input class="input" id="uUser" placeholder="ex: vendedor2" />
+          </label>
+          <label>
+            Senha
+            <input class="input" id="uPass" placeholder="******" />
+          </label>
+        </div>
+
+        <label>
+          Papel
+          <select class="input" id="uRole">
+            <option value="vendedor">vendedor</option>
+            <option value="admin">admin</option>
+          </select>
+        </label>
+
+        <div class="grid2">
+          <button class="btn orange" id="btnAddUser">Adicionar usuário</button>
+          <button class="btn danger" id="btnResetUsers">Resetar usuários padrão</button>
+        </div>
+
+        <div class="sep"></div>
+        <div id="usersList" class="muted">Carregando...</div>
+      </div>
+    </div>
+
+    <div class="drawerFoot">
+      <div class="muted">Dica: troque logins e senha no <b>CONFIG</b>.</div>
+    </div>
+  </aside>
+
+  <script>
+    // =========================================================
+    // ✅ CONFIG (VOCÊ SÓ MUDA AQUI)
+    // =========================================================
+    const CONFIG = {
+      storeName: "Moreno Móveis",
+      tagline: "Móveis com estilo e conforto",
+
+      // Troque a logo colando uma URL
+      logoUrl: "https://images.unsplash.com/photo-1526481280695-3c687fd5432c?auto=format&fit=crop&w=200&q=80",
+
+      // Troque a imagem principal colando uma URL
+      heroImageUrl: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+
+      heroTitle: "Deixe sua casa mais bonita com a Moreno Móveis",
+      heroText: "Escolha móveis de qualidade, com visual moderno e ótimo custo-benefício. Adicione ao carrinho e finalize seu pedido.",
+      heroCaption: "Ambientes planejados, conforto e design — do seu jeito.",
+
+      // Usuários do painel (você pode adicionar mais)
+      // role: "admin" ou "vendedor"
+      defaultStaffUsers: [
+        { username: "admin", password: "1234", role: "admin" },
+        { username: "vendedor", password: "1234", role: "vendedor" }
+      ],
+
+      // Produtos iniciais (com estoque)
+      defaultProducts: [
+        {
+          id: "p1",
+          name: "Sofá 3 lugares Confort",
+          price: 1899.90,
+          category: "Sala",
+          stock: 6,
+          imageUrl: "https://images.unsplash.com/photo-1540574163026-643ea20ade25?auto=format&fit=crop&w=900&q=80",
+          description: "Sofá macio e elegante para sua sala."
+        },
+        {
+          id: "p2",
+          name: "Rack Moderno 1,6m",
+          price: 699.90,
+          category: "Sala",
+          stock: 9,
+          imageUrl: "https://images.unsplash.com/photo-1615873968403-89e068629265?auto=format&fit=crop&w=900&q=80",
+          description: "Rack com ótimo espaço e acabamento premium."
+        },
+        {
+          id: "p3",
+          name: "Mesa de Jantar 6 lugares",
+          price: 1299.90,
+          category: "Cozinha",
+          stock: 4,
+          imageUrl: "https://images.unsplash.com/photo-1449247709967-d4461a6a6103?auto=format&fit=crop&w=900&q=80",
+          description: "Mesa resistente, ideal para família e visitas."
+        },
+        {
+          id: "p4",
+          name: "Guarda-roupa 6 portas",
+          price: 1599.90,
+          category: "Quarto",
+          stock: 3,
+          imageUrl: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=900&q=80",
+          description: "Organização completa para o seu quarto."
+        }
+      ]
+    };
+
+    // =========================================================
+    // STORAGE KEYS
+    // =========================================================
+    const LS = {
+      user: "moreno_user_v2",
+      products: "moreno_products_v2",
+      cart: "moreno_cart_v1",
+      staffUsers: "moreno_staff_users_v1",
+      staffSession: "moreno_staff_session_v1"
+    };
+
+    // =========================================================
+    // HELPERS
+    // =========================================================
+    const $ = (sel) => document.querySelector(sel);
+
+    function moneyBR(value){
+      const n = Number(value || 0);
+      return n.toLocaleString("pt-BR", { style:"currency", currency:"BRL" });
+    }
+    function toast(msg){
+      const el = $("#toast");
+      $("#toastTxt").textContent = msg;
+      el.style.display = "flex";
+      clearTimeout(toast._t);
+      toast._t = setTimeout(()=> el.style.display="none", 2400);
+    }
+    function safeId(){ return "p" + Math.random().toString(16).slice(2, 10); }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // =========================================================
+    // CLIENT USER
+    // =========================================================
+    function getClient(){
+      try { return JSON.parse(localStorage.getItem(LS.user) || "null"); }
+      catch { return null; }
+    }
+    function setClient(user){
+      localStorage.setItem(LS.user, JSON.stringify(user));
+    }
+
+    // =========================================================
+    // STAFF USERS + SESSION
+    // =========================================================
+    function getStaffUsers(){
+      const raw = localStorage.getItem(LS.staffUsers);
+      if(raw){
+        try { return JSON.parse(raw) || []; } catch {}
+      }
+      return [...CONFIG.defaultStaffUsers];
+    }
+    function saveStaffUsers(list){
+      localStorage.setItem(LS.staffUsers, JSON.stringify(list));
+    }
+    function resetStaffUsers(){
+      localStorage.removeItem(LS.staffUsers);
+    }
+
+    function getStaffSession(){
+      try { return JSON.parse(localStorage.getItem(LS.staffSession) || "null"); }
+      catch { return null; }
+    }
+    function setStaffSession(sess){
+      localStorage.setItem(LS.staffSession, JSON.stringify(sess));
+    }
+    function clearStaffSession(){
+      localStorage.removeItem(LS.staffSession);
+    }
+
+    // =========================================================
+    // PRODUCTS
+    // =========================================================
+    function getProducts(){
+      const raw = localStorage.getItem(LS.products);
+      if(raw){
+        try { return JSON.parse(raw) || []; } catch {}
+      }
+      return [...CONFIG.defaultProducts];
+    }
+    function saveProducts(list){
+      localStorage.setItem(LS.products, JSON.stringify(list));
+    }
+    function restoreDefaultProducts(){
+      localStorage.removeItem(LS.products);
+    }
+
+    // =========================================================
+    // CART
+    // =========================================================
+    // cart = { [productId]: qty }
+    function getCart(){
+      const raw = localStorage.getItem(LS.cart);
+      if(raw){
+        try { return JSON.parse(raw) || {}; } catch {}
+      }
+      return {};
+    }
+    function saveCart(cart){
+      localStorage.setItem(LS.cart, JSON.stringify(cart));
+    }
+    function clearCart(){
+      localStorage.removeItem(LS.cart);
+    }
+
+    function cartCount(){
+      const cart = getCart();
+      return Object.values(cart).reduce((a,b)=>a + Number(b||0), 0);
+    }
+
+    function cartTotal(){
+      const cart = getCart();
+      const products = getProducts();
+      let total = 0;
+      for(const [id, qty] of Object.entries(cart)){
+        const p = products.find(x=>x.id===id);
+        if(!p) continue;
+        total += Number(p.price||0) * Number(qty||0);
+      }
+      return total;
+    }
+
+    // =========================================================
+    // MODALS / DRAWERS
+    // =========================================================
+    function showModal(bgId){
+      const bg = $(bgId);
+      bg.style.display = "flex";
+      bg.setAttribute("aria-hidden","false");
+    }
+    function hideModal(bgId){
+      const bg = $(bgId);
+      bg.style.display = "none";
+      bg.setAttribute("aria-hidden","true");
+    }
+
+    function openDrawer(bgEl, drawerEl){
+      bgEl.style.display = "block";
+      drawerEl.classList.add("open");
+    }
+    function closeDrawer(bgEl, drawerEl){
+      drawerEl.classList.remove("open");
+      setTimeout(()=> bgEl.style.display="none", 180);
+    }
+
+    // =========================================================
+    // RENDER HEADER/HERO
+    // =========================================================
+    function renderHeaderAndHero(){
+      $("#siteName").textContent = CONFIG.storeName;
+      $("#siteTag").textContent = CONFIG.tagline;
+      $("#siteLogo").src = CONFIG.logoUrl;
+      $("#heroImage").src = CONFIG.heroImageUrl;
+      $("#heroTitle").textContent = CONFIG.heroTitle;
+      $("#heroText").textContent = CONFIG.heroText;
+      $("#heroCaption").textContent = CONFIG.heroCaption;
+      $("#year").textContent = new Date().getFullYear();
+    }
+
+    function renderClientPill(){
+      const user = getClient();
+      const pill = $("#pillCliente");
+      if(user?.nome){
+        pill.innerHTML = `👤 <b>${escapeHtml(user.nome)}</b>`;
+        pill.title = `Cliente: ${user.nome}`;
+      } else {
+        pill.innerHTML = `👤 <b>Visitante</b>`;
+        pill.title = "Nenhum cadastro encontrado";
+      }
+    }
+
+    function renderStaffUI(){
+      const sess = getStaffSession();
+      const pill = $("#pillStaff");
+      const btnLogout = $("#btnLogout");
+      const btnOpenAdmin = $("#btnOpenAdmin");
+
+      if(sess?.username){
+        pill.style.display = "inline-flex";
+        pill.innerHTML = `🛠️ <b>${escapeHtml(sess.username)}</b> <span class="muted">(${escapeHtml(sess.role)})</span>`;
+        btnLogout.style.display = "inline-flex";
+        btnOpenAdmin.style.display = "inline-flex";
+        $("#btnOpenLogin").style.display = "none";
+      } else {
+        pill.style.display = "none";
+        btnLogout.style.display = "none";
+        btnOpenAdmin.style.display = "none";
+        $("#btnOpenLogin").style.display = "inline-flex";
+      }
+    }
+
+    function renderCartBadge(){
+      $("#cartCount").textContent = String(cartCount());
+    }
+
+    // =========================================================
+    // PRODUCTS RENDER
+    // =========================================================
+    function stockBadge(stock){
+      const n = Number(stock||0);
+      if(n <= 0) return `<span class="stockBadge out">⛔ <strong>Sem estoque</strong></span>`;
+      if(n <= 3) return `<span class="stockBadge low">⚠️ <strong>Estoque baixo</strong></span>`;
+      return `<span class="stockBadge okStock">✅ <strong>Em estoque</strong></span>`;
+    }
+
+    function renderProducts(filterText = ""){
+      const grid = $("#productsGrid");
+      const all = getProducts();
+      const q = (filterText || "").trim().toLowerCase();
+
+      const filtered = !q ? all : all.filter(p => {
+        const base = `${p.name} ${p.category} ${p.description}`.toLowerCase();
+        return base.includes(q);
+      });
+
+      $("#countInfo").textContent = `${filtered.length} produto(s) exibido(s) • ${all.length} no total`;
+
+      grid.innerHTML = filtered.map(p => {
+        const st = Number(p.stock || 0);
+        const disabled = st <= 0 ? "disabled" : "";
+        const btnTxt = st <= 0 ? "Indisponível" : "Adicionar";
+        return `
+        <article class="card product" data-id="${p.id}">
+          <div class="img"><img alt="${escapeHtml(p.name)}" src="${p.imageUrl}" /></div>
+          <div class="body">
+            <h4 class="title">${escapeHtml(p.name)}</h4>
+            <p class="desc">${escapeHtml(p.description || "")}</p>
+            <div class="stockLine">
+              <span>${stockBadge(st)}</span>
+              <span class="mini">Qtd: <b style="color:var(--text)">${st}</b></span>
+            </div>
+            <div class="row">
+              <div>
+                <div class="price">${moneyBR(p.price)}</div>
+                <div class="mini">${escapeHtml(p.category || "Produto")}</div>
+              </div>
+              <button class="btn orange" ${disabled} onclick="addToCart('${p.id}')">${btnTxt}</button>
+            </div>
+            <div class="row" style="gap:8px;">
+              <button class="btn" style="width:100%;" onclick="quickBuy('${p.id}')">Comprar agora</button>
+              <button class="btn" style="width:100%;" onclick="staffEditFromCard('${p.id}')">Editar</button>
+            </div>
+          </div>
+        </article>
+        `;
+      }).join("");
+
+      // esconder botão "Editar" se não tiver staff logado
+      const sess = getStaffSession();
+      if(!sess){
+        document.querySelectorAll('button[onclick^="staffEditFromCard"]').forEach(b=> b.style.display="none");
+      }
+    }
+
+    // =========================================================
+    // CLIENT: CADASTRO
+    // =========================================================
+    function openCadastro(force=false){
+      showModal("#modalCadastroBg");
+      $("#btnFecharCadastro").style.display = force ? "none" : "inline-flex";
+    }
+    function closeCadastro(){
+      hideModal("#modalCadastroBg");
+    }
+    function doCadastro(){
+      const nome = $("#cadNome").value.trim();
+      const tel = $("#cadTel").value.trim();
+      const email = $("#cadEmail").value.trim();
+      const cidade = $("#cadCidade").value.trim();
+
+      if(nome.length < 2){ toast("Digite seu nome."); $("#cadNome").focus(); return; }
+      if(tel.length < 8){ toast("Digite um telefone/WhatsApp válido."); $("#cadTel").focus(); return; }
+
+      setClient({ nome, tel, email, cidade, createdAt: Date.now() });
+      closeCadastro();
+      renderClientPill();
+      toast(`Cadastro salvo! Bem-vindo(a), ${nome}.`);
+    }
+
+    // =========================================================
+    // CART ACTIONS
+    // =========================================================
+    window.addToCart = function(productId){
+      const client = getClient();
+      if(!client){ openCadastro(true); toast("Faça o cadastro para continuar."); return; }
+
+      const products = getProducts();
+      const p = products.find(x=>x.id===productId);
+      if(!p){ toast("Produto não encontrado."); return; }
+
+      const st = Number(p.stock||0);
+      if(st <= 0){ toast("Sem estoque no momento."); return; }
+
+      const cart = getCart();
+      const current = Number(cart[productId] || 0);
+      if(current + 1 > st){
+        toast("Você já colocou o máximo disponível no estoque.");
+        return;
+      }
+
+      cart[productId] = current + 1;
+      saveCart(cart);
+      renderCartBadge();
+      toast("Adicionado ao carrinho!");
+    }
+
+    window.quickBuy = function(productId){
+      addToCart(productId);
+      openCart();
+    }
+
+    function openCart(){
+      renderCart();
+      openDrawer($("#cartBg"), $("#cartDrawer"));
+    }
+    function closeCart(){
+      closeDrawer($("#cartBg"), $("#cartDrawer"));
+    }
+
+    function renderCart(){
+      const cart = getCart();
+      const products = getProducts();
+      const body = $("#cartBody");
+
+      const items = Object.entries(cart)
+        .map(([id, qty]) => {
+          const p = products.find(x=>x.id===id);
+          if(!p) return null;
+          const st = Number(p.stock||0);
+          const q = Number(qty||0);
+          const maxed = q >= st;
+          return { p, q, st, maxed };
+        })
+        .filter(Boolean);
+
+      if(items.length === 0){
+        body.innerHTML = `<div class="muted">Seu carrinho está vazio.</div>`;
+      } else {
+        body.innerHTML = items.map(({p,q,st,maxed}) => `
+          <div class="item">
+            <div class="itemTop">
+              <img class="thumb" src="${p.imageUrl}" alt="${escapeHtml(p.name)}"/>
+              <div style="flex:1;">
+                <h4>${escapeHtml(p.name)}</h4>
+                <p>${moneyBR(p.price)} • Estoque: ${st}</p>
+              </div>
+              <button class="btn danger" onclick="removeItem('${p.id}')">Remover</button>
+            </div>
+
+            <div class="qtyRow">
+              <div class="qtyControls">
+                <button class="qtyBtn" onclick="decQty('${p.id}')">−</button>
+                <div class="qtyVal">${q}</div>
+                <button class="qtyBtn" onclick="incQty('${p.id}')">+</button>
+              </div>
+              <div style="text-align:right;">
+                <div><b>${moneyBR(Number(p.price||0)*q)}</b></div>
+                <div class="muted" style="font-size:12px;">${maxed ? "Máximo do estoque" : ""}</div>
+              </div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      $("#cartTotal").textContent = moneyBR(cartTotal());
+    }
+
+    window.incQty = function(productId){
+      const products = getProducts();
+      const p = products.find(x=>x.id===productId);
+      if(!p) return;
+
+      const st = Number(p.stock||0);
+      const cart = getCart();
+      const q = Number(cart[productId]||0);
+
+      if(q + 1 > st){ toast("Máximo do estoque."); return; }
+      cart[productId] = q + 1;
+      saveCart(cart);
+      renderCartBadge();
+      renderCart();
+    }
+
+    window.decQty = function(productId){
+      const cart = getCart();
+      const q = Number(cart[productId]||0);
+      if(q <= 1){
+        delete cart[productId];
+      } else {
+        cart[productId] = q - 1;
+      }
+      saveCart(cart);
+      renderCartBadge();
+      renderCart();
+    }
+
+    window.removeItem = function(productId){
+      const cart = getCart();
+      delete cart[productId];
+      saveCart(cart);
+      renderCartBadge();
+      renderCart();
+      toast("Item removido.");
+    }
+
+    function doCheckout(){
+      const cart = getCart();
+      const products = getProducts();
+      const entries = Object.entries(cart);
+
+      if(entries.length === 0){ toast("Carrinho vazio."); return; }
+
+      // validar estoque
+      for(const [id, qty] of entries){
+        const p = products.find(x=>x.id===id);
+        if(!p){ toast("Produto inválido no carrinho."); return; }
+        if(Number(qty||0) > Number(p.stock||0)){
+          toast(`Estoque insuficiente: ${p.name}`);
+          return;
+        }
+      }
+
+      // abater estoque
+      for(const [id, qty] of entries){
+        const p = products.find(x=>x.id===id);
+        p.stock = Math.max(0, Number(p.stock||0) - Number(qty||0));
+      }
+      saveProducts(products);
+
+      // gerar resumo
+      const client = getClient() || {};
+      const lines = entries.map(([id, qty])=>{
+        const p = products.find(x=>x.id===id);
+        return `- ${p.name} (x${qty}) = ${moneyBR(Number(p.price||0)*Number(qty||0))}`;
+      }).join("\n");
+
+      const total = moneyBR(cartTotal());
+      const msg =
+`Olá! Quero finalizar meu pedido na Moreno Móveis:
+Cliente: ${client.nome || "-"}
+Telefone: ${client.tel || "-"}
+Cidade: ${client.cidade || "-"}
+
+Itens:
+${lines}
+
+Total: ${total}`;
+
+      // limpar carrinho
+      clearCart();
+      renderCartBadge();
+      renderCart();
+      renderProducts($("#searchInput").value);
+
+      // abrir WhatsApp (se você quiser depois trocar por checkout real)
+      const url = "https://wa.me/?text=" + encodeURIComponent(msg);
+      window.open(url, "_blank");
+
+      toast("Pedido gerado! Abrindo WhatsApp...");
+    }
+
+    // =========================================================
+    // STAFF: LOGIN / ADMIN PANEL
+    // =========================================================
+    function openLogin(){
+      const hint = $("#loginHint");
+      hint.innerHTML = `Padrão: <b>admin/1234</b> ou <b>vendedor/1234</b> (troque no CONFIG).`;
+      showModal("#modalLoginBg");
+      $("#admUser").focus();
+    }
+    function closeLogin(){ hideModal("#modalLoginBg"); }
+
+    function doLogin(){
+      const u = $("#admUser").value.trim();
+      const p = $("#admPass").value.trim();
+      const users = getStaffUsers();
+      const found = users.find(x => x.username === u && x.password === p);
+
+      if(!found){
+        toast("Usuário ou senha inválidos.");
+        return;
+      }
+      setStaffSession({ username: found.username, role: found.role, at: Date.now() });
+      closeLogin();
+      renderStaffUI();
+      toast(`Bem-vindo(a), ${found.username}!`);
+      renderProducts($("#searchInput").value);
+    }
+
+    function doLogout(){
+      clearStaffSession();
+      renderStaffUI();
+      toast("Você saiu do painel.");
+      closeAdmin();
+      renderProducts($("#searchInput").value);
+    }
+
+    function openAdmin(){
+      const sess = getStaffSession();
+      if(!sess){ openLogin(); return; }
+      $("#staffRoleLine").textContent = `Logado como: ${sess.username} (${sess.role})`;
+
+      // Tabs: users só para admin
+      const isAdmin = sess.role === "admin";
+      $("#tabUsers").style.display = isAdmin ? "block" : "none";
+      document.querySelector('button[data-tab="users"]').style.display = isAdmin ? "inline-flex" : "none";
+
+      if(isAdmin){
+        renderUsersList();
+      }
+
+      openDrawer($("#adminBg"), $("#adminDrawer"));
+    }
+
+    function closeAdmin(){
+      closeDrawer($("#adminBg"), $("#adminDrawer"));
+    }
+
+    function setAdminTab(tab){
+      document.querySelectorAll(".tab").forEach(t=> t.classList.remove("active"));
+      document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add("active");
+
+      $("#tabProd").style.display = (tab === "prod") ? "grid" : "none";
+      $("#tabUsers").style.display = (tab === "users") ? "grid" : "none";
+    }
+
+    // Produto form state
+    let editingId = null;
+
+    function clearProductForm(){
+      editingId = null;
+      $("#pName").value = "";
+      $("#pCategory").value = "";
+      $("#pPrice").value = "";
+      $("#pStock").value = "";
+      $("#pImage").value = "";
+      $("#pDesc").value = "";
+      toast("Form limpo.");
+    }
+
+    function saveProductFromForm(){
+      const sess = getStaffSession();
+      if(!sess){ toast("Faça login."); openLogin(); return; }
+
+      const name = $("#pName").value.trim();
+      const category = $("#pCategory").value.trim() || "Produto";
+      const price = Number($("#pPrice").value.trim());
+      const stock = Number($("#pStock").value.trim());
+      const imageUrl = $("#pImage").value.trim();
+      const description = $("#pDesc").value.trim();
+
+      if(name.length < 2){ toast("Nome inválido."); return; }
+      if(!Number.isFinite(price) || price <= 0){ toast("Preço inválido."); return; }
+      if(!Number.isFinite(stock) || stock < 0){ toast("Estoque inválido."); return; }
+      if(!imageUrl){ toast("Informe a URL da imagem."); return; }
+
+      const list = getProducts();
+
+      if(editingId){
+        const idx = list.findIndex(x=>x.id===editingId);
+        if(idx === -1){ toast("Produto não encontrado."); return; }
+        list[idx] = { ...list[idx], name, category, price, stock, imageUrl, description };
+        saveProducts(list);
+        toast("Produto atualizado!");
+      } else {
+        list.unshift({ id: safeId(), name, category, price, stock, imageUrl, description });
+        saveProducts(list);
+        toast("Produto adicionado!");
+      }
+
+      renderProducts($("#searchInput").value);
+    }
+
+    window.staffEditFromCard = function(productId){
+      const sess = getStaffSession();
+      if(!sess){ toast("Faça login no painel."); openLogin(); return; }
+      const p = getProducts().find(x=>x.id===productId);
+      if(!p){ toast("Produto não encontrado."); return; }
+
+      editingId = p.id;
+      $("#pName").value = p.name || "";
+      $("#pCategory").value = p.category || "";
+      $("#pPrice").value = String(p.price ?? "");
+      $("#pStock").value = String(p.stock ?? "");
+      $("#pImage").value = p.imageUrl || "";
+      $("#pDesc").value = p.description || "";
+
+      openAdmin();
+      setAdminTab("prod");
+      toast("Produto carregado para edição.");
+    }
+
+    // Users management (admin only)
+    function renderUsersList(){
+      const users = getStaffUsers();
+      const html = users.map(u => `
+        <div class="item" style="gap:6px;">
+          <div class="line">
+            <b>${escapeHtml(u.username)}</b>
+            <span class="pill" style="margin:0;">🔑 <b>${escapeHtml(u.role)}</b></span>
+          </div>
+          <div class="line">
+            <span class="muted">Senha: <b style="color:var(--text)">${escapeHtml(u.password)}</b></span>
+            <button class="btn danger" onclick="deleteUser('${u.username}')">Excluir</button>
+          </div>
+        </div>
+      `).join("");
+      $("#usersList").innerHTML = html || `<div class="muted">Sem usuários.</div>`;
+    }
+
+    window.deleteUser = function(username){
+      const sess = getStaffSession();
+      if(sess?.role !== "admin"){ toast("Somente Admin."); return; }
+
+      const users = getStaffUsers().filter(u => u.username !== username);
+      saveStaffUsers(users);
+      renderUsersList();
+      toast("Usuário removido.");
+    }
+
+    function addUser(){
+      const sess = getStaffSession();
+      if(sess?.role !== "admin"){ toast("Somente Admin."); return; }
+
+      const username = $("#uUser").value.trim();
+      const password = $("#uPass").value.trim();
+      const role = $("#uRole").value;
+
+      if(username.length < 3){ toast("Usuário muito curto."); return; }
+      if(password.length < 3){ toast("Senha muito curta."); return; }
+
+      const users = getStaffUsers();
+      if(users.some(u => u.username === username)){
+        toast("Usuário já existe.");
+        return;
+      }
+
+      users.push({ username, password, role });
+      saveStaffUsers(users);
+
+      $("#uUser").value = "";
+      $("#uPass").value = "";
+      $("#uRole").value = "vendedor";
+
+      renderUsersList();
+      toast("Usuário adicionado!");
+    }
+
+    function resetUsersToDefault(){
+      const sess = getStaffSession();
+      if(sess?.role !== "admin"){ toast("Somente Admin."); return; }
+      resetStaffUsers();
+      renderUsersList();
+      toast("Usuários resetados para o padrão.");
+    }
+
+    // =========================================================
+    // INIT + EVENTS
+    // =========================================================
+    function init(){
+      renderHeaderAndHero();
+      renderClientPill();
+      renderStaffUI();
+      renderProducts();
+      renderCartBadge();
+
+      // força cadastro ao entrar
+      const client = getClient();
+      if(!client){
+        openCadastro(true);
+      } else {
+        $("#cadNome").value = client.nome || "";
+        $("#cadTel").value = client.tel || "";
+        $("#cadEmail").value = client.email || "";
+        $("#cadCidade").value = client.cidade || "";
+      }
+
+      // Cadastro
+      $("#btnCadastrar").addEventListener("click", doCadastro);
+      $("#btnFecharCadastro").addEventListener("click", closeCadastro);
+      $("#btnMeuCadastro").addEventListener("click", ()=>{
+        const c = getClient();
+        if(c){
+          $("#cadNome").value = c.nome || "";
+          $("#cadTel").value = c.tel || "";
+          $("#cadEmail").value = c.email || "";
+          $("#cadCidade").value = c.cidade || "";
+        }
+        openCadastro(false);
+      });
+
+      // Search
+      $("#searchInput").addEventListener("input", (e)=> renderProducts(e.target.value));
+      $("#btnLimpar").addEventListener("click", ()=>{
+        $("#searchInput").value = "";
+        renderProducts("");
+      });
+
+      // Scroll
+      $("#btnVerProdutos").addEventListener("click", ()=>{
+        $("#productsGrid").scrollIntoView({ behavior:"smooth", block:"start" });
+      });
+
+      // Restore products
+      $("#btnRestoreProducts").addEventListener("click", ()=>{
+        restoreDefaultProducts();
+        renderProducts($("#searchInput").value);
+        toast("Produtos restaurados para o padrão.");
+      });
+
+      // Login
+      $("#btnOpenLogin").addEventListener("click", openLogin);
+      $("#btnFecharLogin").addEventListener("click", closeLogin);
+      $("#btnLogin").addEventListener("click", doLogin);
+
+      // Logout
+      $("#btnLogout").addEventListener("click", doLogout);
+
+      // Admin open
+      $("#btnOpenAdmin").addEventListener("click", openAdmin);
+
+      // Admin drawer
+      $("#btnCloseAdmin").addEventListener("click", closeAdmin);
+      $("#adminBg").addEventListener("click", closeAdmin);
+      document.querySelectorAll(".tab").forEach(t=>{
+        t.addEventListener("click", ()=> setAdminTab(t.dataset.tab));
+      });
+
+      // Admin product form
+      $("#btnClearForm").addEventListener("click", clearProductForm);
+      $("#btnSaveProduct").addEventListener("click", saveProductFromForm);
+
+      // Users admin
+      $("#btnAddUser").addEventListener("click", addUser);
+      $("#btnResetUsers").addEventListener("click", resetUsersToDefault);
+
+      // Cart drawer
+      $("#btnCart").addEventListener("click", openCart);
+      $("#btnCloseCart").addEventListener("click", closeCart);
+      $("#cartBg").addEventListener("click", closeCart);
+      $("#btnClearCart").addEventListener("click", ()=>{
+        clearCart();
+        renderCartBadge();
+        renderCart();
+        toast("Carrinho limpo.");
+      });
+      $("#btnCheckout").addEventListener("click", doCheckout);
+    }
+
+    init();
+  </script>
+</body>
+</html>
