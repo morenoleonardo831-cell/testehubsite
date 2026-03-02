@@ -18,7 +18,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const EXPOSE_RESET_TOKEN = process.env.EXPOSE_RESET_TOKEN === 'true';
 const ADMIN_SEED_EMAIL = String(process.env.ADMIN_SEED_EMAIL || '').trim().toLowerCase();
 const ADMIN_SEED_PASSWORD = String(process.env.ADMIN_SEED_PASSWORD || '');
-const DB_PATH = path.join(__dirname, 'moreno_moveis.db');
+const DB_PATH = process.env.DB_PATH
+  ? path.resolve(process.env.DB_PATH)
+  : path.join(__dirname, 'moreno_moveis.db');
 const ALLOWED_SHIPPING_CITIES = ['paulo de faria', 'orindiuva', 'sao jose do rio preto'];
 const FREE_SHIPPING_CITIES = ['paulo de faria', 'orindiuva'];
 const CORS_ORIGINS = String(process.env.CORS_ORIGIN || '')

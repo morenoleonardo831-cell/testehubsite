@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: moreno-moveis-api
+    env: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/settings
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DB_PATH
+        value: /var/data/moreno_moveis.db
+      - key: CORS_ORIGIN
+        value: https://morenoleonardo831-cell.github.io
+      - key: EXPOSE_RESET_TOKEN
+        value: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_SEED_EMAIL
+        sync: false
+      - key: ADMIN_SEED_PASSWORD
+        sync: false
+    disk:
+      name: moreno-moveis-data
+      mountPath: /var/data
+      sizeGB: 1

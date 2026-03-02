@@ -20,7 +20,11 @@ const state = {
   user: JSON.parse(localStorage.getItem('moreno_user') || 'null')
 };
 
-const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+const runtimeConfig = window.MORENO_CONFIG || {};
+const configuredApiBase = String(runtimeConfig.API_BASE || '')
+  .trim()
+  .replace(/\/+$/, '');
+const API_BASE = configuredApiBase || (window.location.protocol === 'file:' ? 'http://localhost:3000' : '');
 
 const sections = {
   products: document.getElementById('productsSection'),
