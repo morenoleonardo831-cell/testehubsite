@@ -1,0 +1,4 @@
+﻿node_modules/
+.npm-cache/
+.env
+moreno_moveis.db

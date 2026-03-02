@@ -1,0 +1,3 @@
+Defina as credenciais iniciais de admin no arquivo .env:
+ADMIN_SEED_EMAIL=admin@sualoja.com
+ADMIN_SEED_PASSWORD=troque_esta_senha_admin
